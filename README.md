@@ -1,138 +1,112 @@
 # 📺 Sistema de Lives — Mandacaru Esportes & TV Papagaio Icó
 
-Sistema completo para agendamento e exibição de transmissões ao vivo dos dois canais.
+Next.js 14 · App Router · TypeScript · Supabase · Deploy na Vercel
 
 ---
 
-## 🗂️ Estrutura dos arquivos
+## 🗂 Estrutura do projeto
 
 ```
-livestream-project/
-├── schema.sql        ← Cole no SQL Editor do Supabase
-├── servidor.js       ← Backend Node/Express
-├── Calendario.jsx    ← Componente React do calendário
-├── .env              ← Variáveis de ambiente (NÃO envie para o Git!)
-└── README.md
-```
-
----
-
-## 🚀 Passo a passo de instalação
-
-### 1. Configurar o Supabase
-
-1. Acesse [supabase.com](https://supabase.com) e crie um projeto
-2. Vá em **SQL Editor** e cole todo o conteúdo de `schema.sql`
-3. Execute — a tabela `livestreams` será criada com os dados de exemplo
-
-### 2. Configurar o Backend
-
-**Instalar dependências:**
-```bash
-npm install express @supabase/supabase-js cors dotenv
-```
-
-**Criar o arquivo `.env`** na mesma pasta de `servidor.js`:
-```env
-SUPABASE_URL=https://SEU_PROJETO.supabase.co
-SUPABASE_SERVICE_KEY=sua_service_role_key_aqui
-ADMIN_PASSWORD=sua_senha_segura_aqui
-PORT=3001
-```
-
-> ⚠️ **IMPORTANTE:** Use a `service_role key` (não a `anon key`) no backend.
-> Nunca exponha essa chave no frontend!
-
-**Iniciar o servidor:**
-```bash
-node servidor.js
-```
-
-O servidor estará disponível em `http://localhost:3001`
-
-### 3. Usar o componente React
-
-Instale no seu projeto React e importe:
-```jsx
-import Calendario from "./Calendario";
-
-function App() {
-  return <Calendario apiUrl="http://localhost:3001" />;
-}
+lives-nextjs/
+├── schema.sql                         ← Cole no Supabase SQL Editor
+├── .env.local.example                 ← Renomeie para .env.local
+├── next.config.js
+├── package.json
+└── src/
+    ├── app/
+    │   ├── layout.tsx                 ← Layout raiz (fontes, metadata)
+    │   ├── globals.css                ← Variáveis CSS e animações
+    │   ├── page.tsx                   ← Página principal
+    │   ├── components/
+    │   │   ├── CalendarioClient.tsx   ← Grade do calendário
+    │   │   ├── ModalDia.tsx           ← Modal de detalhes do dia
+    │   │   └── TelaAdmin.tsx          ← Painel admin (senha + formulário)
+    │   └── api/
+    │       ├── auth/route.ts          ← POST /api/auth
+    │       ├── criar/route.ts         ← POST /api/criar
+    │       ├── listar/route.ts        ← GET  /api/listar
+    │       ├── evento/[id]/route.ts   ← GET  /api/evento/:id
+    │       └── calendario/[ano]/[mes]/route.ts  ← GET /api/calendario/:ano/:mes
+    └── lib/
+        └── supabase.ts                ← Cliente Supabase (server-only)
 ```
 
 ---
 
-## 🔌 Rotas do Backend
+## 🚀 Deploy na Vercel (passo a passo)
 
-| Método | Rota                         | Descrição                        | Auth   |
-|--------|------------------------------|----------------------------------|--------|
-| POST   | `/api/auth`                  | Verifica senha do admin          | Não    |
-| GET    | `/api/listar`                | Lista eventos (com filtros)      | Não    |
-| GET    | `/api/evento/:id`            | Detalhes de um evento            | Não    |
-| GET    | `/api/calendario/:ano/:mes`  | Calendário do mês                | Não    |
-| POST   | `/api/criar`                 | Cria nova live                   | Senha  |
-| DELETE | `/api/deletar/:id`           | Remove uma live                  | Senha  |
+### 1. Preparar o Supabase
 
-### Exemplos de uso (fetch / curl)
+1. Crie um projeto em [supabase.com](https://supabase.com)
+2. Vá em **SQL Editor** → cole e execute o conteúdo de `schema.sql`
+3. Anote as credenciais em **Settings → API**:
+   - `Project URL` → `SUPABASE_URL`
+   - `service_role` (secret) → `SUPABASE_SERVICE_KEY`
 
-**Listar todas as lives de maio/2026:**
+### 2. Subir para o GitHub
+
 ```bash
-curl "http://localhost:3001/api/listar?data_inicio=2026-05-01&data_fim=2026-05-31"
+git init
+git add .
+git commit -m "first commit"
+git remote add origin https://github.com/SEU_USUARIO/SEU_REPO.git
+git push -u origin main
 ```
 
-**Listar apenas Mandacaru:**
-```bash
-curl "http://localhost:3001/api/listar?canal=mandacaru"
-```
+> Certifique-se que `.env.local` está no `.gitignore` (o Next.js já faz isso por padrão).
 
-**Calendário de maio/2026:**
-```bash
-curl "http://localhost:3001/api/calendario/2026/5"
-```
+### 3. Importar na Vercel
 
-**Criar evento (admin):**
+1. Acesse [vercel.com/new](https://vercel.com/new) e importe o repositório
+2. Em **Environment Variables**, adicione:
+
+| Nome                  | Valor                                    |
+|-----------------------|------------------------------------------|
+| `SUPABASE_URL`        | `https://SEU_PROJETO.supabase.co`        |
+| `SUPABASE_SERVICE_KEY`| `sua_service_role_key`                   |
+| `ADMIN_PASSWORD`      | `sua_senha_forte_aqui`                   |
+
+3. Clique em **Deploy** — pronto! 🎉
+
+### 4. Desenvolvimento local
+
 ```bash
-curl -X POST http://localhost:3001/api/criar \
-  -H "Content-Type: application/json" \
-  -d '{
-    "senha": "sua_senha",
-    "canal": "mandacaru",
-    "titulo": "Jogo do Campeonato",
-    "data": "2026-06-10",
-    "hora_inicio": "19:00",
-    "hora_fim": "21:00",
-    "local": "Estádio Municipal Icó",
-    "descricao": "Final do campeonato regional",
-    "criado_por": "Admin"
-  }'
+# Renomear o arquivo de exemplo
+cp .env.local.example .env.local
+# Preencher com suas credenciais reais
+
+npm install
+npm run dev
+# Acesse http://localhost:3000
 ```
 
 ---
 
-## 🎨 Emojis dos canais
+## 🔌 Rotas da API
 
-| Canal               | Emoji |
-|---------------------|-------|
-| Mandacaru Esportes  | 🌵    |
-| TV Papagaio Icó     | 🦜    |
+| Método   | Rota                            | Descrição                     | Auth   |
+|----------|---------------------------------|-------------------------------|--------|
+| `POST`   | `/api/auth`                     | Verifica senha do admin       | —      |
+| `GET`    | `/api/listar`                   | Lista eventos (com filtros)   | —      |
+| `GET`    | `/api/evento/:id`               | Detalhes de um evento         | —      |
+| `GET`    | `/api/calendario/:ano/:mes`     | Dias com lives no mês         | —      |
+| `POST`   | `/api/criar`                    | Cria nova live                | Senha  |
+| `DELETE` | `/api/evento/:id`               | Remove uma live               | Senha  |
+
+---
+
+## 🎨 Canais
+
+| Canal               | Emoji | Cor      |
+|---------------------|-------|----------|
+| Mandacaru Esportes  | 🌵    | Verde    |
+| TV Papagaio Icó     | 🦜    | Vermelho |
 
 ---
 
 ## 🔒 Segurança
 
-- A `service_role key` do Supabase **nunca** deve aparecer no frontend
-- A senha do admin é verificada no backend antes de qualquer escrita
-- O frontend usa somente leitura pública (via RLS configurado no `schema.sql`)
-- Adicione HTTPS em produção (use um proxy como Nginx ou um serviço como Railway/Render)
-
----
-
-## 📦 Implantação em produção
-
-Opções gratuitas/baratas recomendadas:
-- **Backend:** [Railway](https://railway.app), [Render](https://render.com), ou [Fly.io](https://fly.io)
-- **Frontend:** [Vercel](https://vercel.com) ou [Netlify](https://netlify.com)
-- **Banco de dados:** Supabase (já configurado)
-
-Configure as variáveis de ambiente na plataforma escolhida (não use o `.env` em produção).
+- A `service_role key` fica **somente no servidor** (variável de ambiente da Vercel)
+- O frontend nunca tem acesso a essa chave
+- O RLS do Supabase bloqueia escrita direta pelo cliente
+- Todas as escritas passam pelo backend com verificação de senha

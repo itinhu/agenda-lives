@@ -1,0 +1,55 @@
+/* src/app/globals.css */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --verde:      #15803d;
+  --verde-claro:#dcfce7;
+  --verde-mid:  #bbf7d0;
+  --vermelho:   #b91c1c;
+  --verm-claro: #fee2e2;
+  --carvao:     #111827;
+  --cinza:      #6b7280;
+  --cinza-claro:#f3f4f6;
+  --borda:      #e5e7eb;
+  --branco:     #ffffff;
+  --sombra:     0 4px 24px rgba(0,0,0,.09);
+  --sombra-lg:  0 12px 48px rgba(0,0,0,.18);
+  --radius:     14px;
+  --radius-sm:  8px;
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: #f8f9fa;
+  color: var(--carvao);
+  min-height: 100vh;
+}
+
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: var(--font-body); }
+
+/* Animações */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-up  { animation: fadeUp  .35s ease both; }
+.anim-fade-in  { animation: fadeIn  .2s  ease both; }
+.anim-scale-in { animation: scaleIn .25s ease both; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
