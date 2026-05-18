@@ -1,112 +1,114 @@
-# 📺 Sistema de Lives — Mandacaru Esportes & TV Papagaio Icó
+# 📺 Sistema de Agendamento de Lives - TV Mandacaru & TV Papagaio Icó
 
-Next.js 14 · App Router · TypeScript · Supabase · Deploy na Vercel
+Sistema robusto com calendário visual para agendamento de lives esportivas.
 
----
+## 🌟 Recursos
 
-## 🗂 Estrutura do projeto
+- ✅ Calendário interativo (mês/semana/dia)
+- ✅ Emojis: 🌴 TV Mandacaru | 🦜 TV Papagaio Icó
+- ✅ Link direto para a live
+- ✅ Embed da live ao vivo
+- ✅ Supabase (banco + realtime)
+- ✅ Responsivo (mobile/desktop)
 
-```
-lives-nextjs/
-├── schema.sql                         ← Cole no Supabase SQL Editor
-├── .env.local.example                 ← Renomeie para .env.local
-├── next.config.js
-├── package.json
-└── src/
-    ├── app/
-    │   ├── layout.tsx                 ← Layout raiz (fontes, metadata)
-    │   ├── globals.css                ← Variáveis CSS e animações
-    │   ├── page.tsx                   ← Página principal
-    │   ├── components/
-    │   │   ├── CalendarioClient.tsx   ← Grade do calendário
-    │   │   ├── ModalDia.tsx           ← Modal de detalhes do dia
-    │   │   └── TelaAdmin.tsx          ← Painel admin (senha + formulário)
-    │   └── api/
-    │       ├── auth/route.ts          ← POST /api/auth
-    │       ├── criar/route.ts         ← POST /api/criar
-    │       ├── listar/route.ts        ← GET  /api/listar
-    │       ├── evento/[id]/route.ts   ← GET  /api/evento/:id
-    │       └── calendario/[ano]/[mes]/route.ts  ← GET /api/calendario/:ano/:mes
-    └── lib/
-        └── supabase.ts                ← Cliente Supabase (server-only)
-```
+## 🚀 Instalação
 
----
+### 1. Criar Projeto no Supabase
 
-## 🚀 Deploy na Vercel (passo a passo)
+1. Acesse https://supabase.com
+2. Criar novo projeto
+3. Anote: **URL** e **Anon Key** (Settings → API)
 
-### 1. Preparar o Supabase
+### 2. Configurar Banco de Dados
 
-1. Crie um projeto em [supabase.com](https://supabase.com)
-2. Vá em **SQL Editor** → cole e execute o conteúdo de `schema.sql`
-3. Anote as credenciais em **Settings → API**:
-   - `Project URL` → `SUPABASE_URL`
-   - `service_role` (secret) → `SUPABASE_SERVICE_KEY`
+1. No dashboard do Supabase, vá em **SQL Editor**
+2. Clique em **New Query**
+3. Copie e cole todo conteúdo de `supabase/schema.sql`
+4. Clique em **Run**
 
-### 2. Subir para o GitHub
+### 3. Configurar Frontend
 
 ```bash
-git init
-git add .
-git commit -m "first commit"
-git remote add origin https://github.com/SEU_USUARIO/SEU_REPO.git
-git push -u origin main
-```
+# Criar pasta do projeto
+mkdir tv-mandacaru-schedule
+cd tv-mandacaru-schedule
 
-> Certifique-se que `.env.local` está no `.gitignore` (o Next.js já faz isso por padrão).
+# Criar estrutura de pastas
+mkdir -p supabase frontend/src/components
 
-### 3. Importar na Vercel
+# Criar arquivos (copie o conteúdo de cada arquivo acima)
 
-1. Acesse [vercel.com/new](https://vercel.com/new) e importe o repositório
-2. Em **Environment Variables**, adicione:
-
-| Nome                  | Valor                                    |
-|-----------------------|------------------------------------------|
-| `SUPABASE_URL`        | `https://SEU_PROJETO.supabase.co`        |
-| `SUPABASE_SERVICE_KEY`| `sua_service_role_key`                   |
-| `ADMIN_PASSWORD`      | `sua_senha_forte_aqui`                   |
-
-3. Clique em **Deploy** — pronto! 🎉
-
-### 4. Desenvolvimento local
-
-```bash
-# Renomear o arquivo de exemplo
+# Configurar variáveis de ambiente
+cd frontend
 cp .env.local.example .env.local
-# Preencher com suas credenciais reais
 
+# Editar .env.local:
+VITE_SUPABASE_URL=sua_url_supabase
+VITE_SUPABASE_ANON_KEY=sua_chave_anon
+
+# Instalar dependências
 npm install
+
+# Rodar projeto
 npm run dev
-# Acesse http://localhost:3000
 ```
 
----
+### 4. Acessar
 
-## 🔌 Rotas da API
+Abra: http://localhost:5173
 
-| Método   | Rota                            | Descrição                     | Auth   |
-|----------|---------------------------------|-------------------------------|--------|
-| `POST`   | `/api/auth`                     | Verifica senha do admin       | —      |
-| `GET`    | `/api/listar`                   | Lista eventos (com filtros)   | —      |
-| `GET`    | `/api/evento/:id`               | Detalhes de um evento         | —      |
-| `GET`    | `/api/calendario/:ano/:mes`     | Dias com lives no mês         | —      |
-| `POST`   | `/api/criar`                    | Cria nova live                | Senha  |
-| `DELETE` | `/api/evento/:id`               | Remove uma live               | Senha  |
+## 📅 Adicionar Lives
 
----
+### Via SQL (Supabase):
 
-## 🎨 Canais
+```sql
+INSERT INTO events (
+  channel_id, 
+  title, 
+  start_time, 
+  end_time, 
+  live_url,
+  event_type_id,
+  description
+) VALUES (
+  'a1b2c3d4-e5f6-7890-abcd-ef1234567890', -- TV Mandacaru (🌴)
+  'Jogo Ceará vs Fortaleza',
+  '2026-05-20 19:00:00-03',
+  '2026-05-20 21:30:00-03',
+  'https://youtube.com/watch?v=SEU_VIDEO_ID',
+  'c3d4e5f6-a7b8-9012-cdef-123456789012', -- Jogo Esportivo
+  'Transmissão ao vivo do jogo do вере'
+);
+```
 
-| Canal               | Emoji | Cor      |
-|---------------------|-------|----------|
-| Mandacaru Esportes  | 🌵    | Verde    |
-| TV Papagaio Icó     | 🦜    | Vermelho |
+### Para TV Papagaio Icó (🦜), use:
+`channel_id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'`
 
----
+## 🎯 Canais
 
-## 🔒 Segurança
+| Canal | Emoji | ID |
+|-------|-------|----|
+| TV Mandacaru | 🌴 | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
+| TV Papagaio Icó | 🦜 | b2c3d4e5-f6a7-8901-bcde-f12345678901 |
 
-- A `service_role key` fica **somente no servidor** (variável de ambiente da Vercel)
-- O frontend nunca tem acesso a essa chave
-- O RLS do Supabase bloqueia escrita direta pelo cliente
-- Todas as escritas passam pelo backend com verificação de senha
+## 🛠️ Tech Stack
+
+- **Frontend**: React + Vite
+- **Calendar**: react-big-calendar
+- **Backend**: Supabase (PostgreSQL)
+- **Realtime**: Supabase Realtime
+- **Styling**: CSS3
+
+## 📱 Hospedagem
+
+### Opção 1: Vercel (Recomendado)
+```bash
+npm run build
+# Deploy na Vercel apontando para pasta frontend
+```
+
+### Opção 2: Netlify
+```bash
+npm run build
+# Deploy na Netlify apontando para frontend/dist
+```
