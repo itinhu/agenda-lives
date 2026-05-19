@@ -1,114 +1,36 @@
-# 📺 Sistema de Agendamento de Lives - TV Mandacaru & TV Papagaio Icó
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Sistema robusto com calendário visual para agendamento de lives esportivas.
+## Getting Started
 
-## 🌟 Recursos
-
-- ✅ Calendário interativo (mês/semana/dia)
-- ✅ Emojis: 🌴 TV Mandacaru | 🦜 TV Papagaio Icó
-- ✅ Link direto para a live
-- ✅ Embed da live ao vivo
-- ✅ Supabase (banco + realtime)
-- ✅ Responsivo (mobile/desktop)
-
-## 🚀 Instalação
-
-### 1. Criar Projeto no Supabase
-
-1. Acesse https://supabase.com
-2. Criar novo projeto
-3. Anote: **URL** e **Anon Key** (Settings → API)
-
-### 2. Configurar Banco de Dados
-
-1. No dashboard do Supabase, vá em **SQL Editor**
-2. Clique em **New Query**
-3. Copie e cole todo conteúdo de `supabase/schema.sql`
-4. Clique em **Run**
-
-### 3. Configurar Frontend
+First, run the development server:
 
 ```bash
-# Criar pasta do projeto
-mkdir tv-mandacaru-schedule
-cd tv-mandacaru-schedule
-
-# Criar estrutura de pastas
-mkdir -p supabase frontend/src/components
-
-# Criar arquivos (copie o conteúdo de cada arquivo acima)
-
-# Configurar variáveis de ambiente
-cd frontend
-cp .env.local.example .env.local
-
-# Editar .env.local:
-VITE_SUPABASE_URL=sua_url_supabase
-VITE_SUPABASE_ANON_KEY=sua_chave_anon
-
-# Instalar dependências
-npm install
-
-# Rodar projeto
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### 4. Acessar
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Abra: http://localhost:5173
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## 📅 Adicionar Lives
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Via SQL (Supabase):
+## Learn More
 
-```sql
-INSERT INTO events (
-  channel_id, 
-  title, 
-  start_time, 
-  end_time, 
-  live_url,
-  event_type_id,
-  description
-) VALUES (
-  'a1b2c3d4-e5f6-7890-abcd-ef1234567890', -- TV Mandacaru (🌴)
-  'Jogo Ceará vs Fortaleza',
-  '2026-05-20 19:00:00-03',
-  '2026-05-20 21:30:00-03',
-  'https://youtube.com/watch?v=SEU_VIDEO_ID',
-  'c3d4e5f6-a7b8-9012-cdef-123456789012', -- Jogo Esportivo
-  'Transmissão ao vivo do jogo do вере'
-);
-```
+To learn more about Next.js, take a look at the following resources:
 
-### Para TV Papagaio Icó (🦜), use:
-`channel_id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901'`
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 🎯 Canais
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-| Canal | Emoji | ID |
-|-------|-------|----|
-| TV Mandacaru | 🌴 | a1b2c3d4-e5f6-7890-abcd-ef1234567890 |
-| TV Papagaio Icó | 🦜 | b2c3d4e5-f6a7-8901-bcde-f12345678901 |
+## Deploy on Vercel
 
-## 🛠️ Tech Stack
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- **Frontend**: React + Vite
-- **Calendar**: react-big-calendar
-- **Backend**: Supabase (PostgreSQL)
-- **Realtime**: Supabase Realtime
-- **Styling**: CSS3
-
-## 📱 Hospedagem
-
-### Opção 1: Vercel (Recomendado)
-```bash
-npm run build
-# Deploy na Vercel apontando para pasta frontend
-```
-
-### Opção 2: Netlify
-```bash
-npm run build
-# Deploy na Netlify apontando para frontend/dist
-```
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
